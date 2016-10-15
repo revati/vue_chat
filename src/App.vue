@@ -4,8 +4,9 @@
       <li v-for="message in messages">
         [{{ message.at }}] {{ message.body }}
       </li>
+      <li v-if="isTyping">Someoune is typing</li>
     </ul>
-    <input type="text" v-model="newMessage" @keyup.enter="sendNewMessage(newMessage)">
+    <input type="text" v-model="newMessage" @keyup="sendIsTyping()" @keyup.enter="sendNewMessage(newMessage)">
   </div>
 </template>
 
@@ -18,12 +19,28 @@ export default {
       messages: [],
       newMessage: "",
       channel: null,
+      isTyping: false,
+      timeout: null,
     }
   },
   methods: {
     sendNewMessage (message) {
       this.channel.push("new_msg", {body: this.newMessage});
       this.newMessage = '';
+    },
+    appendMessage (payload) {
+      payload.at = Date()
+      this.messages.push(payload)
+      this.isTyping = false
+    },
+    sendIsTyping () {
+      this.channel.push("typing", {});
+    },
+    markAsTyping () {
+      clearTimeout(this.timeout)
+
+      this.timeout = setTimeout(() => this.isTyping = false, 500)
+      this.isTyping = true
     }
   },
   mounted () {
@@ -31,10 +48,8 @@ export default {
     this.channel = socket.channel("rooms:lobby", {})
 
     // Receive message
-    this.channel.on("new_msg", payload => {
-      payload.at = Date();
-      this.messages.push(payload);
-    });
+    this.channel.on("new_msg", this.appendMessage)
+    this.channel.on("typing", this.markAsTyping)
 
     // Join channel
     this.channel.join()
