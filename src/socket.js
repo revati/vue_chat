@@ -1,6 +1,6 @@
 import {Socket} from "phoenix-socket"
 
-let socket = new Socket("ws://127.0.0.1:4000/socket")
+let socket = new Socket(process.env.SOCKET_LINK)
 
 socket.connect()
 
