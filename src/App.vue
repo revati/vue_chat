@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <ul>
+    <ul id="list">
       <li v-for="message in messages">
         [{{ message.at }}] {{ message.body }}
       </li>
-      <li v-if="isTyping">Someoune is typing</li>
+      <li>... <span v-if="isTyping">Someone is typing</span></li>
     </ul>
+
     <input type="text" v-model="newMessage" @keyup="sendIsTyping()" @keyup.enter="sendNewMessage(newMessage)">
   </div>
 </template>
@@ -39,7 +40,7 @@ export default {
     markAsTyping () {
       clearTimeout(this.timeout)
 
-      this.timeout = setTimeout(() => this.isTyping = false, 500)
+      this.timeout = setTimeout(() => this.isTyping = false, 1000)
       this.isTyping = true
     }
   },
