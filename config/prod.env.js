@@ -1,4 +1,5 @@
 module.exports = {
   NODE_ENV: '"production"',
-  SOCKET_LINK: ''
+  SOCKET_LINK: '',
+  API_ROOT: ''
 }

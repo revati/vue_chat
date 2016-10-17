@@ -3,5 +3,6 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  SOCKET_LINK: '"ws://127.0.0.1:4000/socket"'
+  SOCKET_LINK: '"ws://127.0.0.1:4000/socket"',
+  API_ROOT: '"http://127.0.0.1:4000"'
 })
